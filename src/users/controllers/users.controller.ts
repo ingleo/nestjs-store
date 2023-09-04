@@ -21,9 +21,14 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   get(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
+  }
+
+  @Get('/:id/products')
+  getProductsByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.getProductsByUser(id);
   }
 
   @Post()
@@ -31,7 +36,7 @@ export class UsersController {
     return this.usersService.create(payload);
   }
 
-  @Put(':id')
+  @Put('/:id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateUserDto,
@@ -39,7 +44,7 @@ export class UsersController {
     return this.usersService.update(id, payload);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(+id);
   }

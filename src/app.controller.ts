@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('todo')
+  getTodo(): any[] {
+    return this.appService.getTodoList();
+  }
 }
