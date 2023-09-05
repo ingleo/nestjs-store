@@ -58,7 +58,7 @@ export class UsersService {
     return true;
   }
 
-  getProductsByUser(id: number) {
+  /* getProductsByUser(id: number) {
     const user = this.findOne(id);
     const products = this.productsService.findAll();
 
@@ -66,5 +66,5 @@ export class UsersService {
       user,
       products,
     };
-  }
+  } */
 }

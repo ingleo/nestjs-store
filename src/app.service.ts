@@ -1,15 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService, ConfigType } from '@nestjs/config';
-import config from './config';
+import { Client } from 'pg';
+import config from './config/config';
 
 @Injectable()
 export class AppService {
   constructor(
     @Inject('TST_API_KEY') private tstApiKey: string,
     @Inject('TASKS') private tasks: any[],
-    @Inject('DB_CONN_1') private dbConn: string,
     @Inject(config.KEY) private configServiceType: ConfigType<typeof config>,
     private configService: ConfigService,
+    @Inject('PG') private pgClient: Client,
   ) {}
 
   getHello(): string {
@@ -20,10 +21,6 @@ export class AppService {
     return this.tasks;
   }
 
-  getDbConn(): string {
-    return this.dbConn;
-  }
-
   getAppKey(): string {
     return this.configService.get('APP_KEY');
   }
@@ -32,5 +29,17 @@ export class AppService {
     const dbName = this.configServiceType.database.name;
     const dbPort = this.configServiceType.database.port;
     return `${dbName} : ${dbPort}`;
+  }
+
+  getTestTableInfo(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.pgClient.query('SELECT * FROM test', (err, res) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(res.rows);
+      });
+    });
   }
 }

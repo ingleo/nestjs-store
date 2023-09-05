@@ -18,11 +18,6 @@ export class AppController {
     return this.appService.getTodoList();
   }
 
-  @Get('db')
-  getDbConnStr(): string {
-    return this.appService.getDbConn();
-  }
-
   @Get('appkey')
   getAppPort(): string {
     return this.appService.getAppKey();
@@ -31,5 +26,10 @@ export class AppController {
   @Get('dbinfo')
   getDbInfo(): string {
     return this.appService.getDbInfo();
+  }
+
+  @Get('testdb')
+  getTestTableInfo(): Promise<any> {
+    return this.appService.getTestTableInfo();
   }
 }

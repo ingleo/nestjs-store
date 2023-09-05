@@ -1,16 +1,50 @@
 import { Module, Global } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigType } from '@nestjs/config';
+import { Client } from 'pg';
+
+import config from '../config/config';
 
 @Global()
 @Module({
+  imports: [
+    TypeOrmModule.forRootAsync({
+      inject: [config.KEY],
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const { dbName, user, password, host, port } = configService.postgres;
+        return {
+          type: 'postgres',
+          host,
+          port,
+          username: user,
+          password,
+          database: dbName,
+          // Only use this for dev
+          synchronize: true,
+          autoLoadEntities: true,
+        };
+      },
+    }),
+  ],
   providers: [
     {
-      provide: 'DB_CONN_1',
-      useValue:
-        process.env.NODE_ENV === 'dev'
-          ? 'http://devdatabase.conn'
-          : 'http://database.conn',
+      provide: 'PG',
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const { dbName, user, password, host, port } = configService.postgres;
+        const pgClient = new Client({
+          database: dbName,
+          user,
+          password,
+          host,
+          port,
+        });
+
+        pgClient.connect();
+        return pgClient;
+      },
+      inject: [config.KEY],
     },
   ],
-  exports: ['DB_CONN_1'],
+  exports: ['PG', TypeOrmModule],
 })
 export class DatabaseModule {}
