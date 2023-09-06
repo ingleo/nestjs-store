@@ -21,6 +21,7 @@ import config from '../config/config';
           database: dbName,
           // Only use this for dev
           synchronize: true,
+          // entities: [Product],
           autoLoadEntities: true,
         };
       },

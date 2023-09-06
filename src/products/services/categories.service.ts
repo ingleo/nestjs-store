@@ -1,56 +1,54 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { Category } from '../entities/category.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dtos';
+import { Category } from '../entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
-  private counterId = 1;
+  constructor(
+    @InjectRepository(Category) private categoryRepo: Repository<Category>,
+  ) {}
+  /* private counterId = 1;
   private categories: Category[] = [
     {
       id: 1,
       name: 'Category 1',
     },
-  ];
+  ]; */
 
   findAll() {
-    return this.categories;
+    return this.categoryRepo.find();
   }
 
-  findOne(id: number) {
-    const category = this.categories.find((category) => category.id === id);
+  async findOne(id: number) {
+    const category = await this.categoryRepo.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(`Category ${id} not found`);
     }
     return category;
   }
 
-  create(payload: CreateCategoryDto) {
-    this.counterId = this.counterId + 1;
-    const newCategory = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.categories.push(newCategory);
-    return newCategory;
+  async create(data: CreateCategoryDto) {
+    const newCategory = this.categoryRepo.create(data);
+    return await this.categoryRepo.save(newCategory).catch((error) => {
+      throw new ConflictException(error.detail);
+    });
   }
 
-  update(id: number, payload: UpdateCategoryDto) {
-    const category = this.findOne(id);
-    const index = this.categories.findIndex((category) => category.id === id);
-    this.categories[index] = {
-      ...category,
-      ...payload,
-    };
-    return this.categories[index];
+  async update(id: number, changes: UpdateCategoryDto) {
+    const category = await this.findOne(id);
+    this.categoryRepo.merge(category, changes);
+    return this.categoryRepo.save(category);
   }
 
-  remove(id: number) {
-    const index = this.categories.findIndex((category) => category.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Category ${id} not found`);
-    }
-    this.categories.splice(index, 1);
-    return true;
+  async remove(id: number) {
+    const category = await this.findOne(id);
+    return this.categoryRepo.delete(category);
   }
 }

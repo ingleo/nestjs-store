@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+import { DateAt } from '../../common/entities/date-at.entity';
+
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
@@ -19,4 +21,7 @@ export class Product {
 
   @Column({ type: 'varchar' })
   image: string;
+
+  @Column(() => DateAt)
+  date: DateAt;
 }

@@ -10,7 +10,7 @@ import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { environments } from './environments';
 import config from './config/config';
-import configSchema from './config/configSchema';
+import configSchema from './config/config-schema';
 
 @Module({
   imports: [

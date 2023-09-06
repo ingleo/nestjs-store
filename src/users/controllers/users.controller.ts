@@ -7,6 +7,8 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -34,6 +36,7 @@ export class UsersController {
   } */
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() payload: CreateUserDto) {
     return this.usersService.create(payload);
   }
