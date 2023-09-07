@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Product } from './product.entity';
-import { DateAt } from 'src/common/entities/date-at.entity';
+import { DateAt } from '../../common/entities/date-at.entity';
 
 @Entity()
 export class Category {

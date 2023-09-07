@@ -28,8 +28,8 @@ export class CustomersService {
     return this.customerRepo.find();
   }
 
-  findOne(id: number) {
-    const customer = this.customerRepo.findOneBy({ id });
+  async findOne(id: number) {
+    const customer = await this.customerRepo.findOneBy({ id });
     if (!customer) {
       throw new NotFoundException(`Customer ${id} not found`);
     }
