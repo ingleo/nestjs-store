@@ -1,17 +1,12 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
+
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Product } from './product.entity';
-import { DateAt } from '../../common/entities/date-at.entity';
 
-@Entity()
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Entity({ name: 'categories' })
+export class Category extends BaseEntity {
   @Column({ type: 'varchar', length: 255, unique: true })
   name: string;
-
-  @Column(() => DateAt)
-  date: DateAt;
 
   @ManyToMany(() => Product, (product) => product.categories)
   products: Product[];

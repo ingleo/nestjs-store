@@ -1,31 +1,19 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-  OneToMany,
-} from 'typeorm';
+import { Entity, Column, OneToOne, OneToMany } from 'typeorm';
 
-import { DateAt } from '../../common/entities/date-at.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from './user.entity';
 import { Order } from './order.entity';
 
-@Entity()
-export class Customer {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Entity({ name: 'customers' })
+export class Customer extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ name: 'last_name', type: 'varchar', length: 255 })
   lastName: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   phone: string;
-
-  @Column(() => DateAt)
-  date: DateAt;
 
   @OneToOne(() => User, (user) => user.customer, { nullable: true })
   user: User;

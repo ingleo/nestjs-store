@@ -1,19 +1,10 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 
-import { DateAt } from '../../common/entities/date-at.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Customer } from './customer.entity';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+@Entity({ name: 'users' })
+export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
@@ -23,10 +14,7 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   role: string;
 
-  @Column(() => DateAt)
-  date: DateAt;
-
   @OneToOne(() => Customer, (customer) => customer.user, { nullable: true })
-  @JoinColumn()
+  @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 }

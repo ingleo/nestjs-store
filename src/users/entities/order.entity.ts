@@ -1,24 +1,13 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
-import { DateAt } from '../../common/entities/date-at.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Customer } from './customer.entity';
 import { OrderProduct } from './order-product.entity';
 
-@Entity()
-export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column(() => DateAt)
-  date: DateAt;
-
+@Entity({ name: 'orders' })
+export class Order extends BaseEntity {
   @ManyToOne(() => Customer, (customer) => customer.orders)
+  @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order)
