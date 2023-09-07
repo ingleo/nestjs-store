@@ -14,15 +14,6 @@ export class CustomersService {
   constructor(
     @InjectRepository(Customer) private customerRepo: Repository<Customer>,
   ) {}
-  /* private counterId = 1;
-  private customers: Customer[] = [
-    {
-      id: 1,
-      name: 'Leonardo',
-      lastName: 'Gonzalez',
-      phone: '123456789',
-    },
-  ]; */
 
   findAll() {
     return this.customerRepo.find();

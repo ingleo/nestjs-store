@@ -14,13 +14,6 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
   ) {}
-  /* private counterId = 1;
-  private categories: Category[] = [
-    {
-      id: 1,
-      name: 'Category 1',
-    },
-  ]; */
 
   findAll() {
     return this.categoryRepo.find();

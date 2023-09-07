@@ -18,20 +18,8 @@ export class ProductsService {
     private brandsService: BrandsService,
     private categoriesService: CategoriesService,
   ) {}
-  /* private counterId = 1;
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Product 1',
-      description: 'Is a product',
-      price: 150,
-      image: '',
-      stock: 12,
-    },
-  ]; */
 
   findAll() {
-    //return this.products;
     return this.productRepo.find({ relations: ['brand', 'categories'] });
   }
 
@@ -50,13 +38,6 @@ export class ProductsService {
   }
 
   async create(data: CreateProductDto) {
-    /* const newProduct = new Product();
-    newProduct.name = payload.name;
-    newProduct.description = payload.description;
-    newProduct.price = payload.price;
-    newProduct.stock = payload.stock;
-    newProduct.image = payload.image; */
-
     const newProduct = this.productRepo.create(data);
     if (data.brandId) {
       const brand = await this.brandsService.findOneNoProducts(data.brandId);
@@ -67,7 +48,6 @@ export class ProductsService {
       const categories = await this.categoriesService.findMultiple(
         data.categoriesIds,
       );
-
       newProduct.categories = categories;
     }
     return await this.productRepo.save(newProduct).catch((error) => {
@@ -86,7 +66,6 @@ export class ProductsService {
       const categories = await this.categoriesService.findMultiple(
         changes.categoriesIds,
       );
-
       product.categories = categories;
     }
     this.productRepo.merge(product, changes);

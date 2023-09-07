@@ -18,15 +18,6 @@ export class UsersService {
     private customerService: CustomersService,
     private productsService: ProductsService,
   ) {}
-  /* private counterId = 1;
-  private users: User[] = [
-    {
-      id: 1,
-      email: 'correo@gmail.com',
-      password: '12345',
-      role: 'admin',
-    },
-  ]; */
 
   findAll() {
     return this.userRepo.find({ relations: ['customer'] });

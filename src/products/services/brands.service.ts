@@ -12,14 +12,6 @@ import { Brand } from '../entities/brand.entity';
 @Injectable()
 export class BrandsService {
   constructor(@InjectRepository(Brand) private brandRepo: Repository<Brand>) {}
-  /* private counterId = 1;
-  private brands: Brand[] = [
-    {
-      id: 1,
-      name: 'Brand 1',
-      image: 'https://image.jpeg',
-    },
-  ]; */
 
   findAll() {
     return this.brandRepo.find();
