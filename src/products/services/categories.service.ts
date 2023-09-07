@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dtos';
 import { Category } from '../entities/category.entity';
@@ -27,11 +27,27 @@ export class CategoriesService {
   }
 
   async findOne(id: number) {
-    const category = await this.categoryRepo.findOneBy({ id });
+    const category = await this.categoryRepo.findOne({
+      where: { id },
+      relations: {
+        products: true,
+      },
+    });
     if (!category) {
       throw new NotFoundException(`Category ${id} not found`);
     }
     return category;
+  }
+
+  async findMultiple(categoriesIds: number[]) {
+    const categories = await this.categoryRepo.findBy({
+      id: In(categoriesIds),
+    });
+
+    if (categories.length === 0) {
+      throw new NotFoundException(`One of Categories not found`);
+    }
+    return categories;
   }
 
   async create(data: CreateCategoryDto) {
