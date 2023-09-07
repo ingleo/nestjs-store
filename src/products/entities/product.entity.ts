@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 import { DateAt } from '../../common/entities/date-at.entity';
+import { Brand } from './brand.entity';
 
 @Entity()
 export class Product {
@@ -24,4 +25,7 @@ export class Product {
 
   @Column(() => DateAt)
   date: DateAt;
+
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand: Brand;
 }

@@ -8,11 +8,13 @@ import { Repository } from 'typeorm';
 
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
+import { BrandsService } from './brands.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepo: Repository<Product>,
+    private brandsService: BrandsService,
   ) {}
   /* private counterId = 1;
   private products: Product[] = [
@@ -28,7 +30,7 @@ export class ProductsService {
 
   findAll() {
     //return this.products;
-    return this.productRepo.find();
+    return this.productRepo.find({ relations: ['brand'] });
   }
 
   async findOne(id: number) {
@@ -48,6 +50,10 @@ export class ProductsService {
     newProduct.image = payload.image; */
 
     const newProduct = this.productRepo.create(data);
+    if (data.brandId) {
+      const brand = await this.brandsService.findOne(data.brandId);
+      newProduct.brand = brand;
+    }
     return await this.productRepo.save(newProduct).catch((error) => {
       throw new ConflictException(error.detail);
     });
@@ -55,6 +61,10 @@ export class ProductsService {
 
   async update(id: number, changes: UpdateProductDto) {
     const product = await this.findOne(id);
+    if (changes.brandId) {
+      const brand = await this.brandsService.findOne(changes.brandId);
+      product.brand = brand;
+    }
     this.productRepo.merge(product, changes);
     return this.productRepo.save(product);
   }
