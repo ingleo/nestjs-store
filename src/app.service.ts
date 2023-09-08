@@ -33,7 +33,7 @@ export class AppService {
 
   getTestTableInfo(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.pgClient.query('SELECT * FROM test', (err, res) => {
+      this.pgClient.query('SELECT * FROM public.test', (err, res) => {
         if (err) {
           reject(err);
         }
