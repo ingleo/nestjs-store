@@ -33,13 +33,20 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return await this.userRepo.findOne({
+    const user = await this.userRepo.findOne({
       where: { email },
       select: {
+        id: true,
         email: true,
         role: true,
+        password: true,
       },
     });
+
+    if (!user) {
+      throw new NotFoundException(`User ${email} not found`);
+    }
+    return user;
   }
 
   async create(data: CreateUserDto) {

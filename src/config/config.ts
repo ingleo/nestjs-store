@@ -14,5 +14,9 @@ export default registerAs('config', () => {
       port: parseInt(process.env.POSTGRES_PORT, 10),
     },
     appkey: process.env.APP_KEY,
+    jwt: {
+      secret: process.env.JWT_SECRET,
+      expiration: process.env.JWT_EXPIRATION,
+    },
   };
 });
